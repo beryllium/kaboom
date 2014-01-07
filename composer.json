@@ -1,0 +1,19 @@
+{
+    "name": "beryllium/kaboom",
+    "description": "It goes boom.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kevin Boyd",
+            "email": "kevin.boyd@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+
+    },
+    "autoload": {
+        "psr-0": { "Beryllium\\Kaboom": "" }
+    },
+    "target-dir": "Beryllium/Kaboom"
+}
