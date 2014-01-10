@@ -6,13 +6,13 @@ class Kaboom
 {
     public function __construct($env = null)
     {
-        if ($env != 'dev' && error_reporting() != -1) {
-            $this->kaboom();
+        if (strtolower($env) == 'dev' && error_reporting() != -1) {
+            return $this->kaboom();
         }
     }
 
     public function kaboom()
     {
-        die("kaboom\n");
+        throw new KaboomException();
     }
 }
