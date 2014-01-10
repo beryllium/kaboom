@@ -2,6 +2,12 @@ Kaboom
 ======
 
 Author: Kevin Boyd
+
+Contributors:
+
+* [Kevin Boyd](https://github.com/beryllium)
+* [Jeremy Kendall](https://github.com/jeremykendall)
+
 License: MIT
 
 Inspiration: A twitter joke.
