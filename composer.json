@@ -10,10 +10,10 @@
     ],
     "minimum-stability": "dev",
     "require": {
-
+        "phpunit/phpunit": "3.*"
     },
     "autoload": {
-        "psr-0": { "Beryllium\\Kaboom": "" }
+        "psr-0": { "Beryllium\\Kaboom\\": "" }
     },
     "target-dir": "Beryllium/Kaboom"
 }
