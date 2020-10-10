@@ -4,15 +4,18 @@ namespace Beryllium\Kaboom;
 
 class Kaboom
 {
-    public function __construct($env = null)
-    {
-        if (strtolower($env) == 'dev' && error_reporting() != -1) {
-            return $this->kaboom();
+    /**
+     * @param string   $message
+     * @param callable $condition
+     *
+     * @return bool
+     * @throws KaboomException
+     */
+    public function custom(string $message, callable $condition): bool {
+        if (!$condition()) {
+            return false;
         }
-    }
 
-    public function kaboom()
-    {
-        throw new KaboomException();
+        throw new KaboomException($message);
     }
 }

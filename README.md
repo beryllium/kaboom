@@ -49,6 +49,6 @@ $env = 'dev';
 $kaboom = new Kaboom();
 $kaboom->custom(
     "Error reporting is not set correctly!",
-    fn() => strtolower($env) == 'dev' && error_reporting() != -1
+    fn() => strtolower($env) === 'dev' && error_reporting() !== -1
 );
 ```

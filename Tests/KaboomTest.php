@@ -8,25 +8,30 @@ use PHPUnit\Framework\TestCase;
 
 class KaboomTest extends TestCase
 {
-    public function testKaboomGoesKaboom()
+    public function testCustomKaboomWhenConditionTrips(): void
     {
         $this->expectException(KaboomException::class);
+        $kaboom = new Kaboom();
+
         error_reporting(E_ALL);
-        $kaboom = new Kaboom('prod');
-        $kaboom->kaboom();
+        $env = 'dev';
+        $kaboom->custom(
+            'Environment check failed!',
+            fn() => strtolower($env) === 'dev' && error_reporting() !== -1
+        );
     }
 
-    public function testConstructorGoesKaboomWhenDevErrorReportingChosenPoorly()
+    public function testCustomKaboomWhenConditionFails(): void
     {
-        $this->expectException(KaboomException::class);
-        error_reporting(E_ALL);
-        $kaboom = new Kaboom('dev');
-    }
+        $kaboom = new Kaboom();
 
-    public function testConstructorDoesNotKaboomWhenDevErrorReportingChosenWisely()
-    {
         error_reporting(-1);
-        $kaboom = new Kaboom('dev');
-        $this->assertTrue(true, "test passed - exception was not thrown");
+        $env = 'dev';
+        $actual = $kaboom->custom(
+            'Environment check failed!',
+            fn() => strtolower($env) === 'dev' && error_reporting() !== -1
+        );
+
+        $this->assertFalse($actual, "test passed - exception was not thrown");
     }
 }
