@@ -2,11 +2,21 @@
 
 namespace Beryllium\Kaboom;
 
+use Beryllium\Kaboom\Handlers\ExceptionHandler;
+use Beryllium\Kaboom\Handlers\HandlerInterface;
+
 /**
  * Enables force feedback in your code. In a manner of speaking.
  */
 class Kaboom
 {
+    protected HandlerInterface $handler;
+
+    public function __construct(?HandlerInterface $handler = null)
+    {
+        $this->handler = $handler ?? new ExceptionHandler();
+    }
+
     /**
      * Throw an exception when a custom condition is tripped
      *
@@ -21,7 +31,9 @@ class Kaboom
             return false;
         }
 
-        throw new KaboomException($message);
+        $this->handler->handle($message);
+
+        return true;
     }
 
     /**
@@ -40,6 +52,8 @@ class Kaboom
             return false;
         }
 
-        throw new KaboomException($message);
+        $this->handler->handle($message);
+
+        return true;
     }
 }
