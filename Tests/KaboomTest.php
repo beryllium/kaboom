@@ -3,27 +3,56 @@
 namespace Beryllium\Kaboom\Tests;
 
 use Beryllium\Kaboom\Kaboom;
+use Beryllium\Kaboom\KaboomException;
+use PHPUnit\Framework\TestCase;
 
-class KaboomTest extends \PHPUnit_Framework_TestCase
+class KaboomTest extends TestCase
 {
-    public function testKaboomGoesKaboom()
+    public function testCustomKaboomWhenConditionTrips(): void
     {
-        $this->setExpectedException('Beryllium\Kaboom\KaboomException');
+        $this->expectException(KaboomException::class);
+        $kaboom = new Kaboom();
+
         error_reporting(E_ALL);
-        $kaboom = new Kaboom('prod');
-        $kaboom->kaboom();
+        $env = 'dev';
+        $kaboom->custom(
+            'Environment check failed!',
+            fn() => strtolower($env) === 'dev' && error_reporting() !== -1
+        );
     }
 
-    public function testConstructorGoesKaboomWhenDevErrorReportingChosenPoorly()
+    public function testCustomKaboomWhenConditionFails(): void
     {
-        $this->setExpectedException('Beryllium\Kaboom\KaboomException');
-        error_reporting(E_ALL);
-        $kaboom = new Kaboom('dev');
-    }
+        $kaboom = new Kaboom();
 
-    public function testConstructorDoesNotKaboomWhenDevErrorReportingChosenWisely()
-    {
         error_reporting(-1);
-        $kaboom = new Kaboom('dev');
+        $env = 'dev';
+        $actual = $kaboom->custom(
+            'Environment check failed!',
+            fn() => strtolower($env) === 'dev' && error_reporting() !== -1
+        );
+
+        $this->assertFalse($actual, "test passed - exception was not thrown");
+    }
+
+    public function testKaboomTodoTrips(): void {
+        $this->expectException(KaboomException::class);
+        $kaboom = new Kaboom();
+
+        $kaboom->todo(
+            "This todo needs to be fixed before Thanksgiving! KAB-201",
+            "2020-10-05"
+        );
+    }
+
+    public function testKaboomTodoDoesNotTrip(): void {
+        $kaboom = new Kaboom();
+
+        $actual = $kaboom->todo(
+            "This todo can be postponed indefinitely. No ticket assigned.",
+            "+2 Days"
+        );
+
+        $this->assertFalse($actual, "test passed - exception was not thrown");
     }
 }

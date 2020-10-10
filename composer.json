@@ -8,12 +8,11 @@
             "email": "kevin.boyd@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "phpunit/phpunit": "3.*"
+        "php": ">=7.4",
+        "phpunit/phpunit": "9.*"
     },
     "autoload": {
-        "psr-0": { "Beryllium\\Kaboom\\": "" }
-    },
-    "target-dir": "Beryllium/Kaboom"
+        "psr-4": { "Beryllium\\Kaboom\\": "" }
+    }
 }
