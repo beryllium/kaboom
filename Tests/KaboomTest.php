@@ -3,12 +3,14 @@
 namespace Beryllium\Kaboom\Tests;
 
 use Beryllium\Kaboom\Kaboom;
+use Beryllium\Kaboom\KaboomException;
+use PHPUnit\Framework\TestCase;
 
-class KaboomTest extends \PHPUnit_Framework_TestCase
+class KaboomTest extends TestCase
 {
     public function testKaboomGoesKaboom()
     {
-        $this->setExpectedException('Beryllium\Kaboom\KaboomException');
+        $this->expectException(KaboomException::class);
         error_reporting(E_ALL);
         $kaboom = new Kaboom('prod');
         $kaboom->kaboom();
@@ -16,7 +18,7 @@ class KaboomTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorGoesKaboomWhenDevErrorReportingChosenPoorly()
     {
-        $this->setExpectedException('Beryllium\Kaboom\KaboomException');
+        $this->expectException(KaboomException::class);
         error_reporting(E_ALL);
         $kaboom = new Kaboom('dev');
     }
@@ -25,5 +27,6 @@ class KaboomTest extends \PHPUnit_Framework_TestCase
     {
         error_reporting(-1);
         $kaboom = new Kaboom('dev');
+        $this->assertTrue(true, "test passed - exception was not thrown");
     }
 }
