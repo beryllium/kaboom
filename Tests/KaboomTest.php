@@ -34,4 +34,25 @@ class KaboomTest extends TestCase
 
         $this->assertFalse($actual, "test passed - exception was not thrown");
     }
+
+    public function testKaboomTodoTrips(): void {
+        $this->expectException(KaboomException::class);
+        $kaboom = new Kaboom();
+
+        $kaboom->todo(
+            "This todo needs to be fixed before Thanksgiving! KAB-201",
+            "2020-10-05"
+        );
+    }
+
+    public function testKaboomTodoDoesNotTrip(): void {
+        $kaboom = new Kaboom();
+
+        $actual = $kaboom->todo(
+            "This todo can be postponed indefinitely. No ticket assigned.",
+            "+2 Days"
+        );
+
+        $this->assertFalse($actual, "test passed - exception was not thrown");
+    }
 }

@@ -18,4 +18,14 @@ class Kaboom
 
         throw new KaboomException($message);
     }
+
+    public function todo(string $message, string $date): bool {
+        $timestamp = strtotime($date);
+
+        if (time() < $timestamp) {
+            return false;
+        }
+
+        throw new KaboomException($message);
+    }
 }
