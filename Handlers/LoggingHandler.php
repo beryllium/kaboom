@@ -6,6 +6,12 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
+/**
+ * Kaboom's LoggingHandler
+ *
+ * It may not deliver an earth-shattering Kaboom,
+ * but it should help you log & respond to Kaboom messages.
+ */
 class LoggingHandler implements HandlerInterface, LoggerAwareInterface
 {
     protected LoggerInterface $logger;
@@ -16,7 +22,8 @@ class LoggingHandler implements HandlerInterface, LoggerAwareInterface
         $this->setLogger($logger)->setLoggerLevel($level);
     }
 
-    public function handle(string $message) {
+    public function handle(string $message): void
+    {
         $this->logger->{$this->level}($message);
     }
 
@@ -29,7 +36,7 @@ class LoggingHandler implements HandlerInterface, LoggerAwareInterface
 
     private function setLoggerLevel(string $level): self
     {
-        $levels = [
+        $this->level = match ($level) {
             LogLevel::EMERGENCY,
             LogLevel::ALERT,
             LogLevel::CRITICAL,
@@ -37,14 +44,9 @@ class LoggingHandler implements HandlerInterface, LoggerAwareInterface
             LogLevel::WARNING,
             LogLevel::NOTICE,
             LogLevel::INFO,
-            LogLevel::DEBUG,
-        ];
-
-        if (!in_array($level, $levels, true)) {
-            $level = LogLevel::WARNING;
-        }
-
-        $this->level = $level;
+            LogLevel::DEBUG => $level,
+            default => LogLevel::WARNING
+        };
 
         return $this;
     }

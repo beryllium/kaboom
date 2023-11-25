@@ -2,6 +2,6 @@
 
 namespace Beryllium\Kaboom;
 
-class KaboomException extends \Exception
+class KaboomException extends \RuntimeException
 {
 }

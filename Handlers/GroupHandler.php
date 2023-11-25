@@ -2,6 +2,12 @@
 
 namespace Beryllium\Kaboom\Handlers;
 
+/**
+ * GroupHandler allows you to declare multiple handlers for messages.
+ *
+ * They will be invoked in order of declaration,
+ * so make sure to put any code-terminating ones at the end.
+ */
 class GroupHandler implements HandlerInterface
 {
     protected array $handlers;
@@ -18,7 +24,8 @@ class GroupHandler implements HandlerInterface
         }
     }
 
-    public function handle(string $message) {
+    public function handle(string $message): void
+    {
         foreach ($this->handlers as $handler) {
             $handler->handle($message);
         }
