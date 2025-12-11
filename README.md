@@ -14,9 +14,13 @@ License: MIT
 
 Kaboom helps you deal with the realities of coding in long-term projects.
 
-It provides an interface for adding temporary code to projects, code that needs
-to either start or stop running after a predetermined date on the calendar, or
-safety protections based on environment conditions.
+It provides an interface for controlling the age and stratification of your code.
+
+With Kaboom, you can:
+
+- Safely add temporary code to projects, without it becoming permanent
+- Add code that needs to start or stop running after a specific calendar date
+- Loudly call out code that should *NEVER* run in certain environments
 
 ### ... okay then, WHY Is Kaboom?
 
@@ -57,13 +61,21 @@ https://twitter.com/Beryllium9/status/1314780273398013952
 And then I thought, why not fold that functionality into Kaboom, and use it to
 help codebases fight back against cruft?
 
+## Getting Started
+
+To include Kaboom in your project, use composer:
+
+```
+composer require beryllium/kaboom
+```
+
 ## How to use Kaboom
+
+### The Time Bomb 
 
 Kaboom's default behaviour is to throw a KaboomException if conditions are met.
 
-This is because the `ExceptionHandler` class is used in the default constructor.
-
-**`ExceptionHandler` - Example 1:**
+**Example 1: `ExceptionHandler` with `->afterMessage()` condition**
 
 Here, we set a message that will "go kaboom" starting on Oct 20, 2020.
 
@@ -75,7 +87,7 @@ $kaboom->afterMessage(
 );
 ```
 
-**`ExceptionHandler` - Example 2:**
+**Example 2: `ExceptionHandler` with custom conditions**
 
 Alternatively, we can harken back to the original Kaboom inspiration and
 "go kaboom" if error reporting is insufficient for our environment.
@@ -89,16 +101,17 @@ $kaboom->condition(
 );
 ```
 
-### Configuring a Custom Kaboom Handler
+### Using a Custom Kaboom Handler
 
 Kaboom supports various Handlers that control how it behaves when a condition is
 tripped.
 
 #### LoggingHandler
 
-**`LoggingHandler` - Example 3:**
+**Example 3: Injecting `LoggingHandler`**
 
-To configure Kaboom to log instead of throwing an exception, do this:
+To configure Kaboom to log instead of throwing an exception, build a
+`LoggingHandler` and pass it to `Kaboom`'s constructor:
 
 ```php
 use Beryllium\Kaboom\Kaboom;
@@ -123,12 +136,12 @@ implementation of `HandlerInterface`, which would then allow autowiring to wire
 things together so all you would have to request is
 `$container->get(Beryllium\Kaboom\Kaboom::class)`.
 
-**NOTE:** The second parameter of `LoggingHandler`, the Log Level, is optional.
-          The default log level is `WARNING`.
+> **NOTE:** The second parameter of `LoggingHandler`, the Log Level, is optional.
+>           The default log level is `WARNING`.
 
 #### Null Handler
 
-**`NullHandler` - Example 4:**
+**Example 4: Exploding Quietly with `NullHandler`**
 
 You may want to have different configurations for different environments, such
 as not wanting to blow up on Production.
@@ -156,7 +169,7 @@ Perhaps you want to have multiple handlers, such as if you've written a custom
 Slack handler (please contribute it back if so!! thanks!!). That's where the
 `GroupHandler` comes in.
 
-**`GroupHandler` - Example 5:**
+**Example 5: Multi-Boom with `GroupHandler`**
 
 ```php
 use Beryllium\Kaboom\Kaboom;
@@ -167,7 +180,7 @@ use Your\Custom\Namespace\SlackHandler;
 $kaboom = new Kaboom(
     new GroupHandler([
         new LoggingHandler(),
-        new SlackHandler(),
+        new SlackHandler(), // NOTE: this handler does not yet exist!
     ])
 );
 
@@ -183,12 +196,13 @@ then send it to Slack (in that order).
 ## ... But Why?
 
 You might look at the implementation and think, well, this is just an `if`
-condition. And yeah, you're right - but it's a tiny bit more than that.
+condition. And yeah, you're right - but it's more than that.
 
-Kaboom establishes intentionality. When you use it to wrap something, you're
-making a statement. You're saying that this `if` condition is special.
+Kaboom establishes intentionality.
 
-Maybe you're saying that the code is temporary and can be deleted at some point.
+When you use it to wrap something, you're making a statement. You're saying that
+this `if` condition is special, or maybe that the code is temporary and can be
+deleted at some point.
 
 Maybe you're saying that it's an important safety protection, but you want to
 be able to easily control Production vs Development behaviour to minimize user
@@ -197,7 +211,7 @@ impact.
 Maybe you just want to have some deeper insight into a particular type of `if`
 condition that is peppered throughout your codebase.
 
-Regardless, this libary is here for your needs - whether you want a helpful log
+Regardless, this library is here for your needs - whether you want a helpful log
 entry, or you're just looking for an earth-shattering Kaboom.
 
 ## Contributions Welcome
